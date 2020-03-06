@@ -4,20 +4,39 @@ function eval() {
 }
 
 function expressionCalculator (expr){
-	if (expr.indexOf('(') == -1 && expr.indexOf(')') == -1){
-		return calculator(expr)
-	} else {
+	// if (expr.match(/\(/g).length !== expr.match(/\(/g).length !== null ){
+	// 	throw new Error ('"ExpressionError: Brackets must be paired"')
+	// }
+	
+	if (expr.match(/\(/g) === expr.match(/\)/g) === null){
+		return calculator(expr)}
+
+	if (expr.indexOf('(') !== -1 && expr.indexOf(')') !== -1 && expr.match(/\(/g).length == expr.match(/\(/g).length) {
 
 		let one = expr.indexOf('('),
-			two = expr.indexOf(')'),
-			substr = expr.substring(one+1, two),
-			re = new RegExp (substr),
-			calc1 = (calculator(substr)).toString()
+			
+			substr = expr.match(/\((.*)\)/)[1],			
+			calc1 = calculator (substr)
+			
+			
+			if (calc1 >= 0){
+				res = expr.replace('('+substr+')', calc1.toString())
+				return calculator (res)
+			}else{
+				let plus = expr.lastIndexOf('+', one),
+					minus = expr.lastIndexOf('-', one)
 
-			expr.replace(re, calc1)
+				plus > minus ? res0 = expr.substring(0, one-1) + '-'+ expr.substring(one, expr.length-1) :	
+				plus < minus ? res0 = expr.substring(0, one-1) + '+'+ expr.substring(one, expr.length-1) : res0 = '0-'+expr
 
-		return calculator (expr.replace(re, calc1))
-	}
+				res = res0.replace('('+substr+')', Math.abs(calc1.toString()))
+				return calculator (res)
+							
+			}		
+	} else { throw new Error ('"ExpressionError: Brackets must be paired"')}
+
+	
+
 }
 
 function calculator (expr1){
