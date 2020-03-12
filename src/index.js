@@ -4,42 +4,108 @@ function eval() {
 }
 
 function expressionCalculator (expr){
-	// if (expr.match(/\(/g).length !== expr.match(/\(/g).length !== null ){
-	// 	throw new Error ('"ExpressionError: Brackets must be paired"')
-	// }
 	
-	if (expr.match(/\(/g) === expr.match(/\)/g) === null){
-		return calculator(expr)}
-
-	if (expr.indexOf('(') !== -1 && expr.indexOf(')') !== -1 && expr.match(/\(/g).length == expr.match(/\(/g).length) {
-
-		let one = expr.indexOf('('),
-			
-			substr = expr.match(/\((.*)\)/)[1],			
-			calc1 = calculator (substr)
-			
-			
-			if (calc1 >= 0){
-				res = expr.replace('('+substr+')', calc1.toString())
-				return calculator (res)
-			}else{
-				let plus = expr.lastIndexOf('+', one),
-					minus = expr.lastIndexOf('-', one)
-
-				plus > minus ? res0 = expr.substring(0, one-1) + '-'+ expr.substring(one, expr.length-1) :	
-				plus < minus ? res0 = expr.substring(0, one-1) + '+'+ expr.substring(one, expr.length-1) : res0 = '0-'+expr
-
-				res = res0.replace('('+substr+')', Math.abs(calc1.toString()))
-				return calculator (res)
-							
-			}		
-	} else { throw new Error ('"ExpressionError: Brackets must be paired"')}
-
 	
 
+	if (expr.match(/\(/g) === null && expr.match(/\)/g) === null){
+		return calculator(expr)
+	}else if (expr.match(/\(/g) === null || expr.match(/\)/g) === null){
+		throw new Error ("ExpressionError: Brackets must be paired")
+		}else if (expr.match(/\(/g).length !== expr.match(/\)/g).length) {
+			throw new Error ("ExpressionError: Brackets must be paired")
+		}else {
+				while (/\(|\)/gm.test(expr)){
+
+					console.log('0:'+expr)
+
+					expr = expr.replace(/\([^\(\)]+\)/gm, match => calculator(match.slice(1, match.length - 1)))	
+					
+					console.log('1:'+expr)
+
+
+					while(/\+[\s]+\-/gm.test(expr)){
+						expr = expr.replace(/\+[\s]+\-/gm, '-')
+					}				
+				
+					while(/\-[\s]+\-/gm.test(expr)){
+						expr = expr.replace(/\-[\s]+\-/gm, '+')
+					}				
+				
+					while(/\*[\s]+\-/gm.test(expr)){
+						let x = expr.match(/\*[\s]+\-/).index
+						let str = expr.slice(0 , x)
+						let br = str.lastIndexOf('(')
+							expr = expr.replace(/\*[\s]+\-/gm, '*')
+
+						if (br !== -1){
+							let	a = expr.slice(0,x-1).lastIndexOf('-')
+							let	b = expr.slice(0,x-1).lastIndexOf('+')
+						a > b ? expr =  expr.slice(0, a-1).concat('+') + expr.slice(a+1) 
+							  : a < b ? expr =  expr.slice(0, b-1).concat('-') + expr.slice(b+1)  
+										: expr = '0-'+expr
+						}else{
+							let str2 = str3 = str.slice(br+1)
+							let	a = str2.lastIndexOf('-')
+							let	b = str2.lastIndexOf('+')
+			
+							a > b ? str2 =  str2.slice(0, a-1).concat('+') + str2.slice(a+1) 
+								  : a < b ? str2 =  str2.slice(0, b-1).concat('-') + str2.slice(b+1) 
+									      : str2 = '0-'+str2
+										expr = expr.replace(str3, str2)
+											
+									}				
+				
+					}
+
+					while(/\/[\s]+\-/gm.test(expr)){
+
+						let x = expr.match(/\/[\s]+\-/).index
+						let str = expr.slice(0 , x)
+						let br = str.lastIndexOf('(')
+						expr = expr.replace(/\/[\s]+\-/, '/')
+
+						if (br !== -1){
+							let	a = expr.slice(0,x-1).lastIndexOf('-')
+							let	b = expr.slice(0,x-1).lastIndexOf('+')				
+
+						a > b ? expr =  expr.slice(0, a-1).concat('+') + expr.slice(a+1) 
+							  : a < b ? expr =  expr.slice(0, b-1).concat('-') + expr.slice(b+1)  
+									  : expr = '0-'+expr
+
+						}else{
+							let str2 = str3 = str.slice(br+1)
+							let	a = str2.lastIndexOf('-')
+							let	b = str2.lastIndexOf('+')
+
+							a > b ? str2 =  str2.slice(0, a-1).concat('+') + str2.slice(a+1) 
+							: a < b ? str2 =  str2.slice(0, b-1).concat('-') + str2.slice(b+1) 
+									: str2 = '0-'+str2
+							expr = expr.replace(str3, str2)
+								
+						}
+
+
+						
+						
+
+						console.log('3:'+expr)
+				
+					}
+
+					// console.log('3:'+expr)
+
+
+					
+					
+				}	
+				return calculator (expr)	
+			}
 }
 
 function calculator (expr1){
+
+	
+	
 
 	let strplus = expr1.split('+'),
 		strmin = strplus.map(el => el.split('-'))
