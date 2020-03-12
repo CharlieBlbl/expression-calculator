@@ -37,14 +37,15 @@ function expressionCalculator (expr){
 						let br = str.lastIndexOf('(')
 							expr = expr.replace(/\*[\s]+\-/gm, '*')
 
-						if (br !== -1){
+						if (br == -1){
 							let	a = expr.slice(0,x-1).lastIndexOf('-')
 							let	b = expr.slice(0,x-1).lastIndexOf('+')
 						a > b ? expr =  expr.slice(0, a-1).concat('+') + expr.slice(a+1) 
 							  : a < b ? expr =  expr.slice(0, b-1).concat('-') + expr.slice(b+1)  
 										: expr = '0-'+expr
 						}else{
-							let str2 = str3 = str.slice(br+1)
+							let str2 = str.slice(br+1)
+							let str3 = str.slice(br+1)
 							let	a = str2.lastIndexOf('-')
 							let	b = str2.lastIndexOf('+')
 			
@@ -64,7 +65,7 @@ function expressionCalculator (expr){
 						let br = str.lastIndexOf('(')
 						expr = expr.replace(/\/[\s]+\-/, '/')
 
-						if (br !== -1){
+						if (br == -1){
 							let	a = expr.slice(0,x-1).lastIndexOf('-')
 							let	b = expr.slice(0,x-1).lastIndexOf('+')				
 
@@ -73,7 +74,8 @@ function expressionCalculator (expr){
 									  : expr = '0-'+expr
 
 						}else{
-							let str2 = str3 = str.slice(br+1)
+							let str2 = str.slice(br+1)
+							let str3 = str.slice(br+1)
 							let	a = str2.lastIndexOf('-')
 							let	b = str2.lastIndexOf('+')
 
